@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPEN THE RUSH — Édition Fraîcheur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red: #E4053B;
+    --red-deep: #A10029;
+    --ink: #0B0B0C;
+    --cream: #FDF6EC;
+    --silver: #C9C9C9;
+    --gold: #D4AF37;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3, .display{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    letter-spacing:0.5px;
+    line-height:0.95;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:24px 6vw;
+    mix-blend-mode:difference;
+  }
+  .brand-mark{
+    font-family:'Anton',sans-serif;
+    font-size:1.4rem;
+    color:var(--cream);
+  }
+  nav ul{list-style:none;display:flex;gap:32px;}
+  nav a{color:var(--cream);text-decoration:none;font-size:0.9rem;font-weight:500;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    height:100vh;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    padding:0 6vw;
+    overflow:hidden;
+  }
+  .ribbon{
+    position:absolute;
+    inset:-20% -10%;
+    background:linear-gradient(115deg, transparent 42%, var(--red) 42%, var(--red-deep) 58%, transparent 58%);
+    z-index:0;
+    opacity:0.9;
+  }
+  .hero-copy{position:relative;z-index:2;}
+  .hero-copy .eyebrow{
+    font-size:0.85rem;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:18px;
+    display:block;
+  }
+  .hero-copy h1{
+    font-size:clamp(3rem, 8vw, 6.5rem);
+    color:var(--cream);
+    text-shadow: 0 6px 40px rgba(0,0,0,0.4);
+  }
+  .hero-copy p{
+    max-width:36ch;
+    margin-top:22px;
+    font-size:1.05rem;
+    color:rgba(253,246,236,0.85);
+  }
+  .cta-row{margin-top:38px;display:flex;gap:18px;}
+  .btn{
+    padding:16px 30px;
+    border-radius:100px;
+    font-weight:700;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-block;
+    transition:transform 0.25s ease;
+  }
+  .btn:hover{transform:translateY(-3px);}
+  .btn-primary{background:var(--cream);color:var(--ink);}
+  .btn-ghost{border:1.5px solid rgba(253,246,236,0.5);color:var(--cream);}
+
+  #can-stage{
+    position:relative;z-index:2;
+    height:100%;
+    cursor:grab;
+  }
+  #can-stage:active{cursor:grabbing;}
+  .drag-hint{
+    position:absolute;
+    bottom:8%;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:0.75rem;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:rgba(253,246,236,0.6);
+    z-index:3;
+  }
+
+  /* ---------- MOMENT SECTION ---------- */
+  .moment{
+    padding:14vh 6vw;
+    background:var(--cream);
+    color:var(--ink);
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:6vw;
+    align-items:center;
+  }
+  .moment h2{
+    font-size:clamp(2.4rem,5vw,4rem);
+    color:var(--red-deep);
+  }
+  .moment p{
+    margin-top:20px;
+    font-size:1.05rem;
+    max-width:46ch;
+    color:#2a2a2a;
+  }
+  .fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .fact{
+    border-top:2px solid var(--ink);
+    padding-top:14px;
+  }
+  .fact strong{
+    display:block;
+    font-family:'Anton',sans-serif;
+    font-size:2.2rem;
+    color:var(--red);
+  }
+  .fact span{font-size:0.9rem;color:#555;}
+
+  /* ---------- FLAVORS ---------- */
+  .flavors{
+    padding:14vh 6vw;
+    background:var(--ink);
+  }
+  .flavors-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:6vh;flex-wrap:wrap;gap:16px;
+  }
+  .flavors-head h2{font-size:clamp(2.2rem,5vw,3.6rem);}
+  .flavors-head p{max-width:32ch;color:rgba(253,246,236,0.7);}
+  .flavor-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:2px;
+    background:rgba(253,246,236,0.15);
+  }
+  .flavor-card{
+    background:var(--ink);
+    padding:48px 32px;
+    transition:background 0.35s ease;
+    position:relative;
+  }
+  .flavor-card:hover{background:#161617;}
+  .flavor-card .swatch{
+    width:46px;height:46px;border-radius:50%;
+    margin-bottom:28px;
+  }
+  .flavor-card h3{font-size:1.4rem;margin-bottom:10px;}
+  .flavor-card p{font-size:0.9rem;color:rgba(253,246,236,0.65);}
+
+  /* ---------- QUOTE ---------- */
+  .quote-section{
+    padding:16vh 6vw;
+    text-align:center;
+    background:radial-gradient(ellipse at center, var(--red-deep) 0%, var(--ink) 70%);
+  }
+  .quote-section blockquote{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(1.8rem,4.5vw,3.4rem);
+    max-width:22ch;
+    margin:0 auto;
+    line-height:1.15;
+  }
+  .quote-section cite{
+    display:block;margin-top:24px;font-style:normal;
+    font-size:0.9rem;color:rgba(253,246,236,0.7);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:8vh 6vw 5vh;
+    background:var(--ink);
+    display:flex;justify-content:space-between;align-items:flex-end;
+    flex-wrap:wrap;gap:30px;
+    border-top:1px solid rgba(253,246,236,0.12);
+  }
+  footer .brand-mark{font-size:2rem;}
+  footer .cols{display:flex;gap:60px;flex-wrap:wrap;}
+  footer ul{list-style:none;}
+  footer li{margin-bottom:8px;font-size:0.9rem;color:rgba(253,246,236,0.65);}
+  footer .legal{font-size:0.75rem;color:rgba(253,246,236,0.4);margin-top:40px;width:100%;}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;padding-top:110px;}
+    #can-stage{height:46vh;order:-1;}
+    .moment{grid-template-columns:1fr;}
+    .flavor-grid{grid-template-columns:1fr;}
+    nav ul{display:none;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand-mark">RUSH°</div>
+  <ul>
+    <li><a href="#moment">L'instant</a></li>
+    <li><a href="#flavors">Saveurs</a></li>
+    <li><a href="#quote">Culture</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="ribbon" aria-hidden="true"></div>
+
+  <div class="hero-copy">
+    <span class="eyebrow">ÉDITION FRAÎCHEUR 2026</span>
+    <h1>OUVRE LE<br>MOMENT.</h1>
+    <p>Une canette. Une bulle qui remonte. Trois secondes de fraîcheur qui changent le reste de la journée.</p>
+    <div class="cta-row">
+      <a href="#flavors" class="btn btn-primary">Voir les saveurs</a>
+      <a href="#moment" class="btn btn-ghost">Notre histoire</a>
+    </div>
+  </div>
+
+  <div id="can-stage" aria-label="Canette 3D interactive, glisser pour faire pivoter">
+    <div class="drag-hint">Glisse pour faire tourner ↻</div>
+  </div>
+</section>
+
+<section class="moment" id="moment">
+  <div>
+    <h2>Pensée pour la pause, pas pour l'attente.</h2>
+    <p>Chaque canette est un petit rituel : le clic d'ouverture, le pétillement, la première gorgée glacée. On a construit cette page comme on construit ce moment — net, direct, sans fioritures inutiles.</p>
+  </div>
+  <div class="fact-grid">
+    <div class="fact"><strong>0.33L</strong><span>format canette classique</span></div>
+    <div class="fact"><strong>4°C</strong><span>température idéale de service</span></div>
+    <div class="fact"><strong>100%</strong><span>recyclable à l'infini</span></div>
+    <div class="fact"><strong>3s</strong><span>le temps d'une première gorgée</span></div>
+  </div>
+</section>
+
+<section class="flavors" id="flavors">
+  <div class="flavors-head">
+    <h2>Trois saveurs,<br>un seul geste.</h2>
+    <p>Choisis ton camp. Chacune a son propre univers, sa propre bulle.</p>
+  </div>
+  <div class="flavor-grid">
+    <div class="flavor-card">
+      <div class="swatch" style="background:#E4053B;"></div>
+      <h3>Original</h3>
+      <p>La recette qu'on ne change pas. Franche, pétillante, sans compromis.</p>
+    </div>
+    <div class="flavor-card">
+      <div class="swatch" style="background:#0B0B0C;border:2px solid #C9C9C9;"></div>
+      <h3>Zéro Sucre</h3>
+      <p>Même caractère, même explosion en bouche, zéro concession.</p>
+    </div>
+    <div class="flavor-card">
+      <div class="swatch" style="background:#D4AF37;"></div>
+      <h3>Édition Citron</h3>
+      <p>Une pointe d'agrume qui réveille tout le reste.</p>
+    </div>
+  </div>
+</section>
+
+<section class="quote-section" id="quote">
+  <blockquote>"Le meilleur moment de la journée tient dans une seule bulle."</blockquote>
+  <cite>— Campagne Édition Fraîcheur, 2026</cite>
+</section>
+
+<footer>
+  <div>
+    <div class="brand-mark">RUSH°</div>
+  </div>
+  <div class="cols">
+    <ul>
+      <li>Instagram</li>
+      <li>TikTok</li>
+      <li>YouTube</li>
+    </ul>
+    <ul>
+      <li>Contact</li>
+      <li>Presse</li>
+      <li>Carrières</li>
+    </ul>
+  </div>
+  <p class="legal">Projet de démonstration fictif — design & code originaux. Pas affilié à The Coca-Cola Company.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+<script>
+(function(){
+  const stage = document.getElementById('can-stage');
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(35, stage.clientWidth/stage.clientHeight, 0.1, 100);
+  camera.position.set(0, 0.2, 6);
+
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(stage.clientWidth, stage.clientHeight);
+  stage.appendChild(renderer.domElement);
+  renderer.domElement.style.position = 'absolute';
+  renderer.domElement.style.inset = '0';
+  renderer.domElement.style.width = '100%';
+  renderer.domElement.style.height = '100%';
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const key = new THREE.DirectionalLight(0xffffff, 1.1);
+  key.position.set(3, 5, 4);
+  scene.add(key);
+  const rim = new THREE.DirectionalLight(0xffcc99, 0.6);
+  rim.position.set(-4, -2, -3);
+  scene.add(rim);
+
+  // Build a label texture on canvas (original artwork, no external logo image)
+  function buildLabelTexture(){
+    const c = document.createElement('canvas');
+    c.width = 1024; c.height = 512;
+    const ctx = c.getContext('2d');
+
+    // base red
+    const grad = ctx.createLinearGradient(0,0,0,c.height);
+    grad.addColorStop(0, '#EE1140');
+    grad.addColorStop(1, '#A10029');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,c.width,c.height);
+
+    // dynamic white ribbon
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.beginPath();
+    ctx.moveTo(0, 340);
+    ctx.bezierCurveTo(260, 260, 640, 420, 1024, 300);
+    ctx.lineTo(1024, 360);
+    ctx.bezierCurveTo(640, 470, 260, 320, 0, 400);
+    ctx.closePath();
+    ctx.fill();
+
+    // Brand wordmark (custom, not a copied logo font)
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '900 150px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.35)';
+    ctx.shadowBlur = 14;
+    ctx.fillText('RUSH', c.width/2, 190);
+    ctx.restore();
+
+    ctx.font = '600 34px Arial';
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.fillText('EDITION  FRAICHEUR', c.width/2, 260);
+
+    // bottom small text
+    ctx.font = '500 26px Arial';
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.fillText('OPEN THE MOMENT — 330ML', c.width/2, 460);
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.anisotropy = 8;
+    return tex;
+  }
+
+  const labelTexture = buildLabelTexture();
+
+  const canGroup = new THREE.Group();
+
+  const bodyGeo = new THREE.CylinderGeometry(1, 1, 2.6, 64, 1, true);
+  const bodyMat = new THREE.MeshStandardMaterial({
+    map: labelTexture,
+    metalness: 0.35,
+    roughness: 0.35,
+  });
+  const body = new THREE.Mesh(bodyGeo, bodyMat);
+  canGroup.add(body);
+
+  const capMat = new THREE.MeshStandardMaterial({ color: 0xd8d8d8, metalness: 0.9, roughness: 0.25 });
+  const topGeo = new THREE.CylinderGeometry(1, 1, 0.12, 64);
+  const top = new THREE.Mesh(topGeo, capMat);
+  top.position.y = 1.36;
+  canGroup.add(top);
+  const bottom = new THREE.Mesh(topGeo, capMat);
+  bottom.position.y = -1.36;
+  canGroup.add(bottom);
+
+  const ringGeo = new THREE.TorusGeometry(1, 0.03, 16, 64);
+  const ring1 = new THREE.Mesh(ringGeo, capMat);
+  ring1.rotation.x = Math.PI/2;
+  ring1.position.y = 1.3;
+  canGroup.add(ring1);
+  const ring2 = ring1.clone();
+  ring2.position.y = -1.3;
+  canGroup.add(ring2);
+
+  canGroup.rotation.z = 0.06;
+  scene.add(canGroup);
+
+  // Floating bubbles (single orchestrated ambient motion)
+  const bubbleGeo = new THREE.SphereGeometry(1, 12, 12);
+  const bubbleMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff, transparent:true, opacity:0.35, roughness:0.1, metalness:0
+  });
+  const bubbles = [];
+  for(let i=0;i<22;i++){
+    const s = 0.02 + Math.random()*0.05;
+    const m = new THREE.Mesh(bubbleGeo, bubbleMat);
+    m.scale.setScalar(s);
+    m.position.set((Math.random()-0.5)*2.4, -2 - Math.random()*2, (Math.random()-0.5)*1.2);
+    m.userData.speed = 0.004 + Math.random()*0.008;
+    scene.add(m);
+    bubbles.push(m);
+  }
+
+  // interaction: drag to rotate
+  let isDragging = false, lastX = 0, velocityY = 0.004;
+  stage.addEventListener('pointerdown', e => { isDragging = true; lastX = e.clientX; });
+  window.addEventListener('pointerup', () => isDragging = false);
+  window.addEventListener('pointermove', e => {
+    if(!isDragging) return;
+    const dx = e.clientX - lastX;
+    lastX = e.clientX;
+    velocityY = dx * 0.005;
+    canGroup.rotation.y += velocityY;
+  });
+
+  function animate(){
+    requestAnimationFrame(animate);
+    if(!isDragging){
+      velocityY *= 0.96;
+      canGroup.rotation.y += velocityY + 0.0025;
+    }
+    canGroup.position.y = Math.sin(Date.now()*0.0012)*0.06;
+
+    bubbles.forEach(b=>{
+      b.position.y += b.userData.speed;
+      if(b.position.y > 2){
+        b.position.y = -2.2;
+        b.position.x = (Math.random()-0.5)*2.4;
+      }
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = stage.clientWidth / stage.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(stage.clientWidth, stage.clientHeight);
+  });
+})();
+</script>
+
+</body>
+</html>
